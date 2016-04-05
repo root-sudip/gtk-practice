@@ -1,18 +1,36 @@
 #include <gtk/gtk.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
+#include <error.h>
 
 const gchar *txt;
+const gchar *op;
+char cwd[1024];
 GtkTextBuffer *buff;
 GtkTextIter ei;
 void g_text(GtkWidget *ent,GtkWidget *view){
 	txt = gtk_entry_get_text(GTK_ENTRY(ent));
-		printf("%s\n", txt);
+	int rv;
+	
+	if((strcmp(txt,"pwd"))==0){
+		
+		
+		if((getcwd(cwd,sizeof(cwd)))!= NULL){
+			/*op = cwd;*/
+			op = getcwd(cwd,sizeof(cwd));
+			printf("%s\n", op);
+		}
+	}
+	else{
+		printf("Error:command not found\n");
+		op = "Error: command not found";
+	}
 }
 
 void s_text(GtkWidget *txtv, GtkWidget *sig){
 	gtk_text_buffer_get_end_iter(buff, &ei);
-	gtk_text_buffer_insert(buff, &ei,txt, -1);
+	gtk_text_buffer_insert(buff, &ei,op, -1);
 	gtk_text_buffer_insert(buff, &ei,"\n", -1);
 }
 
