@@ -2,12 +2,27 @@
 #include <stdio.h>
 #include <string.h>
 
+const gchar *txt;
+GtkTextBuffer *buff;
+GtkTextIter ei;
+void g_text(GtkWidget *ent,GtkWidget *view){
+	txt = gtk_entry_get_text(GTK_ENTRY(ent));
+		printf("%s\n", txt);
+}
+
+void s_text(GtkWidget *txtv, GtkWidget *sig){
+	gtk_text_buffer_get_end_iter(buff, &ei);
+	gtk_text_buffer_insert(buff, &ei,txt, -1);
+	gtk_text_buffer_insert(buff, &ei,"\n", -1);
+}
+
+
 int main(int argc,char *argv[]){
 
 	GtkWidget *window,*fixed,*button,*entries,*txtview,*scrolledwindow;
-	GtkTextBuffer *buff;
+	//GtkTextBuffer *buff;
 	gchar *sample = "This is textview";
-	GtkTextIter ei;
+	
 	gtk_init(&argc,&argv);
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title(GTK_WINDOW(window),"Terminal");
@@ -22,12 +37,17 @@ int main(int argc,char *argv[]){
 	/*gtk_text_buffer_set_text(buff,sample,-1);
 	*/
 	//
-		gtk_text_buffer_get_end_iter(buff, &ei);
+		/*gtk_text_buffer_get_end_iter(buff, &ei);
   		gtk_text_buffer_insert(buff, &ei,sample, -1);
   		gtk_text_buffer_insert(buff, &ei,"\n", -1);
   		gtk_text_buffer_insert(buff, &ei,sample, -1);
-
+*/
 	//
+
+
+  	g_signal_connect_swapped(G_OBJECT(button),"clicked",G_CALLBACK(g_text),entries);
+  	g_signal_connect_swapped(G_OBJECT(button),"clicked",G_CALLBACK(s_text),NULL);
+
 
 	gtk_widget_set_size_request(entries,250,20);
 
